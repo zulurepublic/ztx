@@ -7,6 +7,8 @@
 -   [Table of Contents](#table-of-contents)
 -   [Overview](#overview)
 -   [Implementation Details](#implementation-details)
+-   [Licensing](#licensing)
+-   [Learn More](#learn-more)
 -   [Development](#development)
 -   [Setting Up](#setting-up)
 -   [Running Tests](#running-tests)
@@ -27,6 +29,18 @@ This contract distributes ZTX in the token's initial distribution phase. The fir
 -   ZuluToken.sol
 
 Standard ERC20 token contract. It possesses the [ERC20 functions](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md).
+
+## Licensing
+
+Lite.IM is licensed under the [Creative Commons Attribution ShareAlike](https://creativecommons.org/licenses/by-sa/4.0/) (CC-BY-SA-4.0) license. This means you are free to share or adapt it in any way.
+
+## Learn More
+
+To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/) and [blog](www.medium.com/zulurepublic).
+
+The Zulu Republic Telegram community can be found [here](https://t.me/ztxrepublic).
+
+Follow Zulu Republic on Twitter at [@ztxrepublic](www.twitter.com/ztxrepublic).
 
 ## Development
 
