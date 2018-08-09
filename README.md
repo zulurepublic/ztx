@@ -25,7 +25,8 @@ This contract distributes ZTX in the token's initial distribution phase. The fir
 `triggerAirDrop` is the main function that distributes tokens to recipient addresses. You pass a recipient and she gets the ZTX tokens. A user who claimed their ZTX airdropped tokens cannot do so again.
 
 -   ZuluToken.sol
-    Standard ERC20 token contract. It possesses the [ERC20 functions](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)
+
+Standard ERC20 token contract. It possesses the [ERC20 functions](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md).
 
 ## Development
 
@@ -51,7 +52,7 @@ This contract distributes ZTX in the token's initial distribution phase. The fir
 
 ## Test Coverage
 
-To see current test coverage open `coverage/index.html` in a browser.
+To see current test coverage, open `coverage/index.html` in a browser.
 
 To generate test coverage, type:
 
