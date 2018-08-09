@@ -6,9 +6,13 @@ const capOnAirdropReceivers = 100000;
 module.exports = function(deployer) {
     return deployer
         .then(() => {
-            return deployer.deploy(AirDropper, capOnAirdropReceivers);
+            return deployer.deploy(ZuluToken);
         })
         .then(() => {
-            return deployer.deploy(ZuluToken);
+            return deployer.deploy(
+                AirDropper,
+                capOnAirdropReceivers,
+                ZuluToken.address
+            );
         });
 };

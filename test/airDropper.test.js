@@ -13,19 +13,17 @@ contract(
         const tokenAmountForContract = new BigNumber(100000000e18);
 
         beforeEach(async () => {
-            airdrop = await AirDropper.new(capOnAirdropReceivers);
-
             token = await ZuluToken.new();
+            airdrop = await AirDropper.new(
+                capOnAirdropReceivers,
+                token.address
+            );
         });
 
         describe('AirDropper contract', () => {
-            beforeEach(async () => {
-                await airdrop.setZuluToken(token.address);
-            });
-
             it('must not deploy when the air drop cap is null', async () => {
                 try {
-                    airdrop = await AirDropper.new(0);
+                    airdrop = await AirDropper.new(0, token.address);
                     assert.fail();
                 } catch (e) {
                     ensuresException(e);
@@ -130,109 +128,109 @@ contract(
             });
         });
 
-        describe('#setZuluToken', () => {
-            it('does NOT allow a NON owner to set the token contract', async () => {
-                try {
-                    await airdrop.setZuluToken(token.address, {
-                        from: buyer
-                    });
-                    assert.fail();
-                } catch (e) {
-                    ensuresException(e);
-                }
+        // describe('#setZuluToken', () => {
+        //     it('does NOT allow a NON owner to set the token contract', async () => {
+        //         try {
+        //             await airdrop.setZuluToken(token.address, {
+        //                 from: buyer
+        //             });
+        //             assert.fail();
+        //         } catch (e) {
+        //             ensuresException(e);
+        //         }
+        //
+        //         const tokenContract = await airdrop.zulu();
+        //         // still the previous one
+        //         tokenContract.should.be.equal(
+        //             '0x0000000000000000000000000000000000000000'
+        //         );
+        //     });
+        //
+        //     it('does NOT allow a owner to set the token contract with a empty address', async () => {
+        //         try {
+        //             await airdrop.setZuluToken('0x0', {
+        //                 from: owner
+        //             });
+        //             assert.fail();
+        //         } catch (e) {
+        //             ensuresException(e);
+        //         }
+        //
+        //         const tokenContract = await airdrop.zulu();
+        //         // still the previous one
+        //         tokenContract.should.be.equal(
+        //             '0x0000000000000000000000000000000000000000'
+        //         );
+        //     });
+        //
+        //     it('allows owner to set the token contract', async () => {
+        //         await airdrop.setZuluToken(token.address, {
+        //             from: owner
+        //         });
+        //
+        //         const tokenContractAddress = await airdrop.zulu();
+        //         tokenContractAddress.should.be.equal(token.address);
+        //     });
+        // });
 
-                const tokenContract = await airdrop.zulu();
-                // still the previous one
-                tokenContract.should.be.equal(
-                    '0x0000000000000000000000000000000000000000'
-                );
-            });
-
-            it('does NOT allow a owner to set the token contract with a empty address', async () => {
-                try {
-                    await airdrop.setZuluToken('0x0', {
-                        from: owner
-                    });
-                    assert.fail();
-                } catch (e) {
-                    ensuresException(e);
-                }
-
-                const tokenContract = await airdrop.zulu();
-                // still the previous one
-                tokenContract.should.be.equal(
-                    '0x0000000000000000000000000000000000000000'
-                );
-            });
-
-            it('allows owner to set the token contract', async () => {
-                await airdrop.setZuluToken(token.address, {
-                    from: owner
-                });
-
-                const tokenContractAddress = await airdrop.zulu();
-                tokenContractAddress.should.be.equal(token.address);
-            });
-        });
-
-        describe('#emergencyTokenDrain', () => {
-            beforeEach(async () => {
-                await airdrop.setZuluToken(token.address);
-            });
-
-            it('must be called only by owner', async () => {
-                await token.mint(airdrop.address, tokenAmountForContract);
-
-                try {
-                    await airdrop.emergencyTokenDrain(10e18, {
-                        from: buyer
-                    });
-                    assert.fail();
-                } catch (e) {
-                    ensuresException(e);
-                }
-
-                let ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(0);
-
-                // allow when owner calls function
-                await airdrop.emergencyTokenDrain(10e18, {
-                    from: owner
-                });
-
-                ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(10e18);
-            });
-
-            it('is callable when contract has token balance', async () => {
-                try {
-                    await airdrop.emergencyTokenDrain(8e18, {
-                        from: owner
-                    });
-                    assert.fail();
-                } catch (e) {
-                    ensuresException(e);
-                }
-
-                let ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(0);
-
-                // airdrop contract has tokens now
-                await token.mint(airdrop.address, 8e18);
-
-                await airdrop.emergencyTokenDrain(8e18, {
-                    from: owner
-                });
-
-                ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(8e18);
-            });
-        });
+        // describe('#emergencyTokenDrain', () => {
+        //     // beforeEach(async () => {
+        //     //     await airdrop.setZuluToken(token.address);
+        //     // });
+        //
+        //     it('must be called only by owner', async () => {
+        //         await token.mint(airdrop.address, tokenAmountForContract);
+        //
+        //         try {
+        //             await airdrop.emergencyTokenDrain(10e18, {
+        //                 from: buyer
+        //             });
+        //             assert.fail();
+        //         } catch (e) {
+        //             ensuresException(e);
+        //         }
+        //
+        //         let ownerBalance = await token.balanceOf(owner);
+        //         ownerBalance.should.be.bignumber.equal(0);
+        //
+        //         // allow when owner calls function
+        //         await airdrop.emergencyTokenDrain(10e18, {
+        //             from: owner
+        //         });
+        //
+        //         ownerBalance = await token.balanceOf(owner);
+        //         ownerBalance.should.be.bignumber.equal(10e18);
+        //     });
+        //
+        //     it('is callable when contract has token balance', async () => {
+        //         try {
+        //             await airdrop.emergencyTokenDrain(8e18, {
+        //                 from: owner
+        //             });
+        //             assert.fail();
+        //         } catch (e) {
+        //             ensuresException(e);
+        //         }
+        //
+        //         let ownerBalance = await token.balanceOf(owner);
+        //         ownerBalance.should.be.bignumber.equal(0);
+        //
+        //         // airdrop contract has tokens now
+        //         await token.mint(airdrop.address, 8e18);
+        //
+        //         await airdrop.emergencyTokenDrain(8e18, {
+        //             from: owner
+        //         });
+        //
+        //         ownerBalance = await token.balanceOf(owner);
+        //         ownerBalance.should.be.bignumber.equal(8e18);
+        //     });
+        // });
 
         describe('#kill', () => {
-            beforeEach(async () => {
-                await airdrop.setZuluToken(token.address);
-            });
+            // beforeEach(async () => {
+            //     await airdrop.setZuluToken(token.address);
+            // });
 
             it('must be called only by owner', async () => {
                 await token.mint(airdrop.address, tokenAmountForContract);

@@ -28,11 +28,13 @@ contract AirDropper is Ownable {
     /**
      * @dev Constructor for the airdrop contract
      * @param _airdropReceiversLimit Cap of airdrop receivers
+     * @param _zulu ZTX contract address
      */
-    constructor(uint256 _airdropReceiversLimit) public {
+    constructor(uint256 _airdropReceiversLimit, ERC20 _zulu) public {
         require(_airdropReceiversLimit != 0);
 
         airdropReceiversLimit = _airdropReceiversLimit;
+        zulu = ERC20(_zulu);
     }
 
     modifier hasBalance() {
@@ -40,15 +42,6 @@ contract AirDropper is Ownable {
         uint256 balance = zulu.balanceOf(this);
         require(balance > 0);
         _;
-    }
-
-    /**
-     * @dev Set external contract for the zulu token
-     * @param _token Zulu token contract
-     */
-    function setZuluToken(address _token) external onlyOwner {
-        require(_token != address(0));
-        zulu = ERC20(_token);
     }
 
     /**
@@ -69,17 +62,9 @@ contract AirDropper is Ownable {
 
         numOfCitizensWhoReceivedDrops = numOfCitizensWhoReceivedDrops.add(1);
         claimedAirdropTokens[recipient] = true;
-        // eligible citizens for airdrop. They receive tokenAmount in ZTX
+        // eligible citizens for airdrop receive tokenAmount in ZTX
         zulu.transfer(recipient, tokenAmount);
         emit TokenDrop(recipient, tokenAmount);
-    }
-
-    /**
-     * @dev Emergency transfer tokens to contract owner
-     * @param amount Number of tokens to transfer
-     */
-    function emergencyTokenDrain(uint256 amount) external onlyOwner hasBalance {
-        zulu.transfer(owner, amount);
     }
 
     /**
