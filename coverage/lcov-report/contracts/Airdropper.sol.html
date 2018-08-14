@@ -22,22 +22,22 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>14/14</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">91.67% </span>
-        <span class="quiet">Branches</span>
-        <span class='fraction'>11/12</span>
+        <span class='fraction'>10/10</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
-        <span class="quiet">Functions</span>
+        <span class="quiet">Branches</span>
         <span class='fraction'>6/6</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>18/18</span>
+        <span class='fraction'>13/13</span>
       </div>
     </div>
   </div>
@@ -115,28 +115,7 @@
 70
 71
 72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+73</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -168,26 +147,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">10×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-yes">12×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12×</span>
-<span class="cline-any cline-yes">11×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,14 +174,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">9×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,6 +181,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,13 +191,13 @@
 &nbsp;
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "zeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "./ZTXInterface.sol";
 &nbsp;
 &nbsp;
 /**
  * @title AirDropper
  * @author Gustavo Guimaraes - &lt;gustavo@zulurepublic.io&gt;
- * @dev Contract for the Zulu token airdrop
+ * @dev Contract for the ZTX airdrop
  */
 contract AirDropper is Ownable {
     using SafeMath for uint256;
@@ -252,34 +210,20 @@ contract AirDropper is Ownable {
     uint256 public tokenAmount = 1000e18;
     uint256 public airdropReceiversLimit;
 &nbsp;
-    ERC20 public zulu;
+    ZTXInterface public ztx;
 &nbsp;
     event TokenDrop(address indexed receiver, uint256 amount);
 &nbsp;
     /**
      * @dev Constructor for the airdrop contract
      * @param _airdropReceiversLimit Cap of airdrop receivers
+     * @param _ztx ZTX contract address
      */
-    constructor(uint256 _airdropReceiversLimit) public {
+    constructor(uint256 _airdropReceiversLimit, ZTXInterface _ztx) public {
         require(_airdropReceiversLimit != 0);
 &nbsp;
         airdropReceiversLimit = _airdropReceiversLimit;
-    }
-&nbsp;
-    modifier hasBalance() {
-        <span class="missing-if-branch" title="else path not taken" >E</span>require(zulu != address(0));
-        uint256 balance = zulu.balanceOf(this);
-        require(balance &gt; 0);
-        _;
-    }
-&nbsp;
-    /**
-     * @dev Set external contract for the zulu token
-     * @param _token Zulu token contract
-     */
-    function setZuluToken(address _token) external onlyOwner {
-        require(_token != address(0));
-        zulu = ERC20(_token);
+        ztx = ZTXInterface(_ztx);
     }
 &nbsp;
     /**
@@ -292,33 +236,26 @@ contract AirDropper is Ownable {
         )
         external
         onlyOwner
-        hasBalance
     {
-&nbsp;
+        // NOTE: airdrop must be the token owner in order to mint ZTX tokens
         dropAmount = dropAmount.add(tokenAmount);
         require(dropAmount &lt;= AIRDROP_SHARE &amp;&amp; !claimedAirdropTokens[recipient]);
 &nbsp;
         numOfCitizensWhoReceivedDrops = numOfCitizensWhoReceivedDrops.add(1);
         claimedAirdropTokens[recipient] = true;
-        // eligible citizens for airdrop. They receive tokenAmount in ZTX
-        zulu.transfer(recipient, tokenAmount);
+        // eligible citizens for airdrop receive tokenAmount in ZTX
+        ztx.mint(recipient, tokenAmount);
         emit TokenDrop(recipient, tokenAmount);
-    }
-&nbsp;
-    /**
-     * @dev Emergency transfer tokens to contract owner
-     * @param amount Number of tokens to transfer
-     */
-    function emergencyTokenDrain(uint256 amount) external onlyOwner hasBalance {
-        zulu.transfer(owner, amount);
     }
 &nbsp;
     /**
      * @dev Emergency to self destruct contract
      */
-    function kill() external onlyOwner {
+    function kill(address newZuluOwner) external onlyOwner {
         require(numOfCitizensWhoReceivedDrops &gt;= airdropReceiversLimit);
-        zulu.transfer(owner, zulu.balanceOf(this));
+&nbsp;
+        ztx.unpause();
+        ztx.transferOwnership(newZuluOwner);
         selfdestruct(owner);
     }
 }
@@ -328,7 +265,7 @@ contract AirDropper is Ownable {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Aug 02 2018 11:32:56 GMT+0200 (CEST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Aug 14 2018 12:29:29 GMT+0200 (CEST)
 </div>
 </div>
 <script src="../prettify.js"></script>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for contracts/Airdropper.sol</title>
+    <title>Code coverage report for contracts/MintableToken.sol</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,32 +16,32 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> Airdropper.sol
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> MintableToken.sol
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">70% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>10/10</span>
+        <span class='fraction'>7/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>2/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">75% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>3/3</span>
+        <span class='fraction'>3/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">75% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>13/13</span>
+        <span class='fraction'>9/12</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -104,18 +104,7 @@
 59
 60
 61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+62</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,20 +124,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">9×</span>
@@ -166,98 +145,86 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10×</span>
-<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">9×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity 0.4.24;
 &nbsp;
+import "zeppelin-solidity/contracts/token/ERC827/ERC827Token.sol";
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "./ZTXInterface.sol";
 &nbsp;
 &nbsp;
 /**
- * @title AirDropper
- * @author Gustavo Guimaraes - &lt;gustavo@zulurepublic.io&gt;
- * @dev Contract for the ZTX airdrop
+ * @title Mintable token
+ * @dev Simple ERC20 with ERC827 extension Token example, with mintable token creation
+ * @dev Issue: * https://github.com/OpenZeppelin/openzeppelin-solidity/issues/120
+ * Based on code by TokenMarketNet: https://github.com/TokenMarketNet/ico/blob/master/contracts/MintableToken.sol
  */
-contract AirDropper is Ownable {
-    using SafeMath for uint256;
+contract MintableToken is ERC827Token, Ownable {
+  event Mint(address indexed to, uint256 amount);
+  event MintFinished();
 &nbsp;
-    mapping (address =&gt; bool) public claimedAirdropTokens;
+  bool public mintingFinished = false;
 &nbsp;
-    uint256 public numOfCitizensWhoReceivedDrops;
-    uint256 public dropAmount;
-    uint256 public constant AIRDROP_SHARE = 100000000e18; // 100M
-    uint256 public tokenAmount = 1000e18;
-    uint256 public airdropReceiversLimit;
 &nbsp;
-    ZTXInterface public ztx;
+  modifier canMint() {
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(!mintingFinished);
+    _;
+  }
 &nbsp;
-    event TokenDrop(address indexed receiver, uint256 amount);
+  modifier hasMintPermission() {
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(msg.sender == owner);
+    _;
+  }
 &nbsp;
-    /**
-     * @dev Constructor for the airdrop contract
-     * @param _airdropReceiversLimit Cap of airdrop receivers
-     * @param _ztx ZTX contract address
-     */
-    constructor(uint256 _airdropReceiversLimit, ZTXInterface _ztx) public {
-        require(_airdropReceiversLimit != 0);
+  /**
+   * @dev Function to mint tokens
+   * @param _to The address that will receive the minted tokens.
+   * @param _amount The amount of tokens to mint.
+   * @return A boolean that indicates if the operation was successful.
+   */
+  function mint(
+    address _to,
+    uint256 _amount
+  )
+    hasMintPermission
+    canMint
+    public
+    returns (bool)
+  {
+    totalSupply_ = totalSupply_.add(_amount);
+    balances[_to] = balances[_to].add(_amount);
+    emit Mint(_to, _amount);
+    emit Transfer(address(0), _to, _amount);
+    return true;
+  }
 &nbsp;
-        airdropReceiversLimit = _airdropReceiversLimit;
-        ztx = ZTXInterface(_ztx);
-    }
-&nbsp;
-    /**
-     * @dev Distributes tokens to recipient addresses
-     * @param recipient address to receive airdropped token
-     */
-    function triggerAirDrop
-        (
-            address recipient
-        )
-        external
-        onlyOwner
-    {
-        // NOTE: airdrop must be the token owner in order to mint ZTX tokens
-        dropAmount = dropAmount.add(tokenAmount);
-        require(dropAmount &lt;= AIRDROP_SHARE &amp;&amp; !claimedAirdropTokens[recipient]);
-&nbsp;
-        numOfCitizensWhoReceivedDrops = numOfCitizensWhoReceivedDrops.add(1);
-        claimedAirdropTokens[recipient] = true;
-        // eligible citizens for airdrop receive tokenAmount in ZTX
-        ztx.mint(recipient, tokenAmount);
-        emit TokenDrop(recipient, tokenAmount);
-    }
-&nbsp;
-    /**
-     * @dev Emergency to self destruct contract
-     */
-    function kill(address newZuluOwner) external onlyOwner {
-        require(numOfCitizensWhoReceivedDrops &gt;= airdropReceiversLimit);
-&nbsp;
-        ztx.unpause();
-        ztx.transferOwnership(newZuluOwner);
-        selfdestruct(owner);
-    }
+  /**
+   * @dev Function to stop minting new tokens.
+   * @return True if the operation was successful.
+   */
+<span class="fstat-no" title="function not covered" >  function finishMinting() onlyOwner canMint public returns (bool) </span>{
+<span class="cstat-no" title="statement not covered" >    mintingFinished = true</span>;
+<span class="cstat-no" title="statement not covered" >    emit MintFinished();</span>
+<span class="cstat-no" title="statement not covered" >    return true;</span>
+  }
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -265,7 +232,7 @@ contract AirDropper is Ownable {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Aug 14 2018 12:29:29 GMT+0200 (CEST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Aug 14 2018 12:27:55 GMT+0200 (CEST)
 </div>
 </div>
 <script src="../prettify.js"></script>
