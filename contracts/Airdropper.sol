@@ -2,13 +2,13 @@ pragma solidity 0.4.24;
 
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "zeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "./ZTXInterface.sol";
 
 
 /**
  * @title AirDropper
- * @author Gustavo Guimaraes - <gustavo@zulurepublic.io>
- * @dev Contract for the Zulu token airdrop
+ * @author Gustavo Guimaraes - <gustavo@ztxrepublic.io>
+ * @dev Contract for the ZTX airdrop
  */
 contract AirDropper is Ownable {
     using SafeMath for uint256;
@@ -21,27 +21,20 @@ contract AirDropper is Ownable {
     uint256 public tokenAmount = 1000e18;
     uint256 public airdropReceiversLimit;
 
-    ERC20 public zulu;
+    ZTXInterface public ztx;
 
     event TokenDrop(address indexed receiver, uint256 amount);
 
     /**
      * @dev Constructor for the airdrop contract
      * @param _airdropReceiversLimit Cap of airdrop receivers
-     * @param _zulu ZTX contract address
+     * @param _ztx ZTX contract address
      */
-    constructor(uint256 _airdropReceiversLimit, ERC20 _zulu) public {
+    constructor(uint256 _airdropReceiversLimit, ZTXInterface _ztx) public {
         require(_airdropReceiversLimit != 0);
 
         airdropReceiversLimit = _airdropReceiversLimit;
-        zulu = ERC20(_zulu);
-    }
-
-    modifier hasBalance() {
-        require(zulu != address(0));
-        uint256 balance = zulu.balanceOf(this);
-        require(balance > 0);
-        _;
+        ztx = ZTXInterface(_ztx);
     }
 
     /**
@@ -54,25 +47,26 @@ contract AirDropper is Ownable {
         )
         external
         onlyOwner
-        hasBalance
     {
-
+        // NOTE: airdrop must be the token owner in order to mint ZTX tokens
         dropAmount = dropAmount.add(tokenAmount);
         require(dropAmount <= AIRDROP_SHARE && !claimedAirdropTokens[recipient]);
 
         numOfCitizensWhoReceivedDrops = numOfCitizensWhoReceivedDrops.add(1);
         claimedAirdropTokens[recipient] = true;
         // eligible citizens for airdrop receive tokenAmount in ZTX
-        zulu.transfer(recipient, tokenAmount);
+        ztx.mint(recipient, tokenAmount);
         emit TokenDrop(recipient, tokenAmount);
     }
 
     /**
      * @dev Emergency to self destruct contract
      */
-    function kill() external onlyOwner {
+    function kill(address newZuluOwner) external onlyOwner {
         require(numOfCitizensWhoReceivedDrops >= airdropReceiversLimit);
-        zulu.transfer(owner, zulu.balanceOf(this));
+
+        ztx.unpause();
+        ztx.transferOwnership(newZuluOwner);
         selfdestruct(owner);
     }
 }
