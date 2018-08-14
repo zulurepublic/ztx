@@ -74,12 +74,22 @@ To generate test coverage, type:
 
 ## 6. Licensing
 
-Lite.IM is licensed under the [Creative Commons Attribution ShareAlike](https://creativecommons.org/licenses/by-sa/4.0/) (CC-BY-SA-4.0) license. This means you are free to share or adapt it in any way.
+Zulu-Passport is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/agpl-3.0.en.html) (agpl-3.0) license.
 
-## 7. Learn More
+## 7. What is the Zulu Republic Foundation?
 
-To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/) and [blog](www.medium.com/zulurepublic).
+The Zulu Republic Foundation is a Swiss organization charged with managing the underlying technology of the Zulu Republic blockchain ecosystem. The foundation’s mission is to advance the development of decentralized technologies, to promote human rights and empowerment around the globe, and to reduce the global digital divide.
 
-The Zulu Republic Telegram community can be found [here](https://t.me/ztxrepublic).
+In support of this mission, the Zulu Republic Foundation is responsible for the following activity:
 
-Follow Zulu Republic on Twitter at [@ztxrepublic](www.twitter.com/ztxrepublic).
+-   Developing open-source distributed ledger technologies (DLT)
+-   Developing self-sovereign identity technologies (SSI)
+-   Creating and distributing educational content on the subjects of digital security, privacy, and blockchain technology.
+-   Maintaining and managing the ZTX token and reserve, and all Zulu Republic smart contracts.
+-   Incubating and seeding initiatives, businesses, and non-profit organizations that utilize ZTX and/or its underlying open-source technologies in their daily operations.
+
+Currently the Zulu Republic Foundation is developing an ecosystem of platforms on the Ethereum blockchain, combining solutions for both self-sovereign identity (the Zulu Republic Passport) and economic agency (ZTX token and Zulu Pay financial platform).
+
+## 8. Learn More
+
+To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/), [blog](www.medium.com/zulurepublic), and on Twitter at [@ztxrepublic](www.twitter.com/ztxrepublic).
