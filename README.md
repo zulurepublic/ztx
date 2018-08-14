@@ -4,7 +4,7 @@
 
 ## 1. What is ZTX and Its Airdrop
 
-The ZuluToken(ZTX) contract is a standard ERC20 token. It is the token used within the Zulu Republic.
+The ZTX contract is a standard ERC20 token. It is the token used within the Zulu Republic.
 
 The Airdrop is our way of rewarding early adopters and seeding the Zulu Republic ecosystem with a free distribution of ZTX, no strings attached. During the Airdrop, the first 100,000 people to sign up will be able to claim a free ZTX deposit to their Zulu wallet, with no need to stake or deposit any of their own funds to participate.
 
@@ -38,7 +38,7 @@ This contract distributes ZTX in the token's initial distribution phase. The fir
 
 `triggerAirDrop` is the main function that distributes tokens to recipient addresses. You pass a recipient and she gets the ZTX tokens. A user who claimed their ZTX airdropped tokens cannot do so again.
 
--   ZuluToken.sol
+-   ZTX.sol
 
 Standard ERC20 token contract. It possesses the [ERC20 functions](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md).
 
