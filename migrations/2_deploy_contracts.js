@@ -12,7 +12,7 @@ module.exports = function(deployer) {
             return deployer.deploy(
                 AirDropper,
                 capOnAirdropReceivers,
-                ZuluToken.address
+                ZTX.address
             );
         });
 };

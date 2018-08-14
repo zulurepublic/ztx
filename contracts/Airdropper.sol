@@ -7,7 +7,7 @@ import "./ZTXInterface.sol";
 
 /**
  * @title AirDropper
- * @author Gustavo Guimaraes - <gustavo@ztxrepublic.io>
+ * @author Gustavo Guimaraes - <gustavo@zulurepublic.io>
  * @dev Contract for the ZTX airdrop
  */
 contract AirDropper is Ownable {
