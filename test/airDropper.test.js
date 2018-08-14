@@ -1,6 +1,6 @@
 const { should, ensuresException } = require('./helpers/utils');
 const AirDropper = artifacts.require('./AirDropper.sol');
-const ZuluToken = artifacts.require('./ZuluToken.sol');
+const ZTX = artifacts.require('./ZTX.sol');
 
 const BigNumber = web3.BigNumber;
 
@@ -13,11 +13,13 @@ contract(
         const tokenAmountForContract = new BigNumber(100000000e18);
 
         beforeEach(async () => {
-            token = await ZuluToken.new();
+            token = await ZTX.new();
             airdrop = await AirDropper.new(
                 capOnAirdropReceivers,
                 token.address
             );
+
+            token.transferOwnership(airdrop.address);
         });
 
         describe('AirDropper contract', () => {
@@ -31,8 +33,6 @@ contract(
             });
 
             it('must be called only by owner', async () => {
-                await token.mint(airdrop.address, tokenAmountForContract);
-
                 try {
                     await airdrop.triggerAirDrop(buyer, {
                         from: buyer
@@ -75,8 +75,6 @@ contract(
             });
 
             it('does not give airdrop tokens twice to same user', async () => {
-                await token.mint(airdrop.address, tokenAmountForContract);
-
                 await airdrop.triggerAirDrop(buyer2, {
                     from: owner
                 });
@@ -99,8 +97,6 @@ contract(
             });
 
             it('sends tokens to recipients', async () => {
-                await token.mint(airdrop.address, tokenAmountForContract);
-
                 await airdrop.triggerAirDrop(buyer, {
                     from: owner
                 });
@@ -116,8 +112,6 @@ contract(
             });
 
             it('logs TokenDrop event', async () => {
-                await token.mint(airdrop.address, tokenAmountForContract);
-
                 const { logs } = await airdrop.triggerAirDrop(buyer, {
                     from: owner
                 });
@@ -130,7 +124,6 @@ contract(
 
         describe('#kill', () => {
             it('must be called only by owner', async () => {
-                await token.mint(airdrop.address, tokenAmountForContract);
                 await airdrop.triggerAirDrop(buyer, {
                     from: owner
                 });
@@ -139,7 +132,7 @@ contract(
                 });
 
                 try {
-                    await airdrop.kill({
+                    await airdrop.kill(owner, {
                         from: buyer
                     });
                     assert.fail();
@@ -147,26 +140,29 @@ contract(
                     ensuresException(e);
                 }
 
-                let ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(0);
+                let airdropOwner = await token.owner();
+                airdropOwner.should.be.equal(airdrop.address);
+
+                let isTokenPaused = await token.paused();
+                isTokenPaused.should.be.true;
 
                 // allow when owner calls function
-                await airdrop.kill({
+                await airdrop.kill(owner, {
                     from: owner
                 });
 
-                ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(
-                    tokenAmountForContract.minus(2000e18)
-                ); // two addresses have received 1000 each in tokens
+                airdropOwner = await token.owner();
+                airdropOwner.should.be.equal(owner);
+
+                isTokenPaused = await token.paused();
+                isTokenPaused.should.be.false;
             });
 
             it('is callable when cap on airdrop receivers is reached', async () => {
-                await token.mint(airdrop.address, tokenAmountForContract);
                 await airdrop.triggerAirDrop(buyer, { from: owner });
 
                 try {
-                    await airdrop.kill({
+                    await airdrop.kill(owner, {
                         from: owner
                     });
                     assert.fail();
@@ -174,19 +170,24 @@ contract(
                     ensuresException(e);
                 }
 
-                let ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(0);
+                let airdropOwner = await token.owner();
+                airdropOwner.should.be.equal(airdrop.address);
+
+                let isTokenPaused = await token.paused();
+                isTokenPaused.should.be.true;
 
                 await airdrop.triggerAirDrop(buyer2, { from: owner });
 
-                await airdrop.kill({
+                // allow when owner calls function
+                await airdrop.kill(owner, {
                     from: owner
                 });
 
-                ownerBalance = await token.balanceOf(owner);
-                ownerBalance.should.be.bignumber.equal(
-                    tokenAmountForContract.minus(2000e18)
-                ); // two addresses have received 1000 each in tokens
+                airdropOwner = await token.owner();
+                airdropOwner.should.be.equal(owner);
+
+                isTokenPaused = await token.paused();
+                isTokenPaused.should.be.false;
             });
         });
     }

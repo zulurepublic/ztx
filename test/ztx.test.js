@@ -1,12 +1,12 @@
-const ZuluToken = artifacts.require('./ZuluToken.sol');
+const ZTX = artifacts.require('./ZTX.sol');
 
-const { should } = require('./helpers/utils');
+const { should, ensuresException } = require('./helpers/utils');
 
-contract('ZuluToken', () => {
+contract('ZTX', ([_, acct1]) => {
     let token;
 
     beforeEach(async () => {
-        token = await ZuluToken.new();
+        token = await ZTX.new();
     });
 
     it('has a name', async () => {
@@ -22,5 +22,17 @@ contract('ZuluToken', () => {
     it('contains 18 decimals', async () => {
         const decimals = await token.decimals();
         decimals.should.be.bignumber.equal(18);
+    });
+
+    it('ztx transfer is paused', async () => {
+        const paused = await token.paused();
+        paused.should.be.true;
+
+        try {
+            await token.transfer(acct1, 1e18);
+            assert.fail();
+        } catch (error) {
+            ensuresException(error);
+        }
     });
 });
