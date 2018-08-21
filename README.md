@@ -72,6 +72,18 @@ To generate test coverage, type:
 
 -   `npm run cov`
 
+**Generate Flattened Contracts**
+
+To generate flattened version of contracts in `flats/`, type:
+
+-   `npm run flat`
+
+To generate flatten version of contracts and serve them to remix, type:
+
+-   install `remixd` with `npm -g remixd`
+
+-   `npm run remix`
+
 ## 6. Licensing
 
 Zulu-Passport is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/agpl-3.0.en.html) (agpl-3.0) license.

@@ -8,7 +8,9 @@
     },
     "scripts": {
         "test": "bash scripts/run_test.sh",
-        "cov": "bash scripts/coverage.sh"
+        "cov": "bash scripts/coverage.sh",
+        "flat": "bash scripts/flatten.sh",
+        "remix": "bash scripts/flatten.sh && remixd -s ./flats"
     },
     "author": "Gustavo Guimaraes",
     "license": "ISC",
@@ -27,7 +29,7 @@
         "eslint-plugin-promise": "^3.6.0",
         "eslint-plugin-standard": "^2.3.1",
         "solidity-coverage": "^0.5.5",
-        "truffle-contract": "^3.0.0"
+        "truffle-flattener": "^1.2.6"
     },
     "dependencies": {
         "chai": "^4.1.2",
