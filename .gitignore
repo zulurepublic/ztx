@@ -1,2 +1,7 @@
 node_modules
 /build
+
+# coverage files
+coverage
+coverage.json
+coverageEnv
