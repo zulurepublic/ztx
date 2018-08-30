@@ -123,22 +123,20 @@ contract ZTXInterface {
     function unpause() public;
 }
 
-// File: contracts/Airdropper.sol
+// File: contracts/airdropper/AirDropperCore.sol
 
 /**
- * @title AirDropper
+ * @title AirDropperCore
  * @author Gustavo Guimaraes - <gustavo@zulurepublic.io>
  * @dev Contract for the ZTX airdrop
  */
-contract AirDropper is Ownable {
+contract AirDropperCore is Ownable {
     using SafeMath for uint256;
 
     mapping (address => bool) public claimedAirdropTokens;
 
     uint256 public numOfCitizensWhoReceivedDrops;
-    uint256 public dropAmount;
-    uint256 public constant AIRDROP_SHARE = 100000000e18; // 100M
-    uint256 public tokenAmount = 1000e18;
+    uint256 public tokenAmountPerUser;
     uint256 public airdropReceiversLimit;
 
     ZTXInterface public ztx;
@@ -148,12 +146,18 @@ contract AirDropper is Ownable {
     /**
      * @dev Constructor for the airdrop contract
      * @param _airdropReceiversLimit Cap of airdrop receivers
+     * @param _tokenAmountPerUser Number of tokens done per user
      * @param _ztx ZTX contract address
      */
-    constructor(uint256 _airdropReceiversLimit, ZTXInterface _ztx) public {
-        require(_airdropReceiversLimit != 0);
-
+    constructor(uint256 _airdropReceiversLimit, uint256 _tokenAmountPerUser, ZTXInterface _ztx) public {
+        require(
+            _airdropReceiversLimit != 0 &&
+            _tokenAmountPerUser != 0 &&
+            _ztx != address(0),
+            "constructor params cannot be empty"
+        );
         airdropReceiversLimit = _airdropReceiversLimit;
+        tokenAmountPerUser = _tokenAmountPerUser;
         ztx = ZTXInterface(_ztx);
     }
 
@@ -161,29 +165,79 @@ contract AirDropper is Ownable {
      * @dev Distributes tokens to recipient addresses
      * @param recipient address to receive airdropped token
      */
-    function triggerAirDrop
-        (
-            address recipient
-        )
+    function triggerAirDrop(address recipient)
         external
         onlyOwner
     {
-        // NOTE: airdrop must be the token owner in order to mint ZTX tokens
-        dropAmount = dropAmount.add(tokenAmount);
-        require(dropAmount <= AIRDROP_SHARE && !claimedAirdropTokens[recipient]);
-
         numOfCitizensWhoReceivedDrops = numOfCitizensWhoReceivedDrops.add(1);
+
+        require(
+            numOfCitizensWhoReceivedDrops <= airdropReceiversLimit &&
+            !claimedAirdropTokens[recipient],
+            "Cannot give more tokens than airdropShare and cannot airdrop to an address that already receive tokens"
+        );
+
         claimedAirdropTokens[recipient] = true;
-        // eligible citizens for airdrop receive tokenAmount in ZTX
-        ztx.mint(recipient, tokenAmount);
-        emit TokenDrop(recipient, tokenAmount);
+
+        // eligible citizens for airdrop receive tokenAmountPerUser in ZTX
+        sendTokensToUser(recipient, tokenAmountPerUser);
+        emit TokenDrop(recipient, tokenAmountPerUser);
     }
 
     /**
-     * @dev Emergency to self destruct contract
+     * @dev Can be overridden to add sendTokensToUser logic. The overriding function
+     * should call super.sendTokensToUser() to ensure the chain is
+     * executed entirely.
+     * @param recipient Address to receive airdropped tokens
+     * @param tokenAmount Number of rokens to receive
+     */
+    function sendTokensToUser(address recipient, uint256 tokenAmount) internal {
+    }
+}
+
+// File: contracts/airdropper/MintableAirdropper.sol
+
+/**
+ * @title MintableAirDropper
+ * @author Gustavo Guimaraes - <gustavo@zulurepublic.io>
+ * @dev Airdrop contract that mints ZTX tokens
+ */
+contract MintableAirDropper is AirDropperCore {
+    /**
+     * @dev Constructor for the airdrop contract.
+     * NOTE: airdrop must be the token owner in order to mint ZTX tokens
+     * @param _airdropReceiversLimit Cap of airdrop receivers
+     * @param _tokenAmountPerUser Number of tokens done per user
+     * @param _ztx ZTX contract address
+     */
+    constructor
+        (
+            uint256 _airdropReceiversLimit,
+            uint256 _tokenAmountPerUser,
+            ZTXInterface _ztx
+        )
+        public
+        AirDropperCore(_airdropReceiversLimit, _tokenAmountPerUser, _ztx)
+    {}
+
+    /**
+     * @dev override sendTokensToUser logic
+     * @param recipient Address to receive airdropped tokens
+     * @param tokenAmount Number of rokens to receive
+     */
+    function sendTokensToUser(address recipient, uint256 tokenAmount) internal {
+        ztx.mint(recipient, tokenAmount);
+        super.sendTokensToUser(recipient, tokenAmount);
+    }
+
+    /**
+     * @dev Self-destructs contract
      */
     function kill(address newZuluOwner) external onlyOwner {
-        require(numOfCitizensWhoReceivedDrops >= airdropReceiversLimit);
+        require(
+            numOfCitizensWhoReceivedDrops >= airdropReceiversLimit,
+            "only able to kill contract when numOfCitizensWhoReceivedDrops equals or is higher than airdropReceiversLimit"
+        );
 
         ztx.unpause();
         ztx.transferOwnership(newZuluOwner);
