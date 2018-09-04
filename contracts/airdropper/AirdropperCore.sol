@@ -41,12 +41,21 @@ contract AirDropperCore is Ownable {
         ztx = ZTXInterface(_ztx);
     }
 
+    function triggerAirDrops(address[] recipients)
+        external
+        onlyOwner
+    {
+        for (uint256 i = 0; i < recipients.length; i++) {
+            triggerAirDrop(recipients[i]);
+        }
+    }
+
     /**
      * @dev Distributes tokens to recipient addresses
      * @param recipient address to receive airdropped token
      */
     function triggerAirDrop(address recipient)
-        external
+        public
         onlyOwner
     {
         numOfCitizensWhoReceivedDrops = numOfCitizensWhoReceivedDrops.add(1);
