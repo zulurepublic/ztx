@@ -1,12 +1,12 @@
 pragma solidity 0.4.24;
 
-import "./MintableToken.sol";
 import "./ZTXInterface.sol";
+import "zeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 import "zeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
 
 
 /**
- * @title ZTX contract - ERC20 and its extension ERC827 compatible token contract.
+ * @title ZTX contract - ERC20 token contract.
  * @author Gustavo Guimaraes - <gustavo@zulurepublic.io>
  */
 contract ZTX is MintableToken, PausableToken {
