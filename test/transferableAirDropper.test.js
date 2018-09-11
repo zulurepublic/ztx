@@ -25,6 +25,7 @@ contract("TransferableAirDropper", ([owner, buyer, buyer2, buyer3]) => {
       await token.mint(airdrop.address, airdropShare);
       await token.unpause();
     });
+
     it("must not deploy when the air drop cap is null", async () => {
       try {
         airdrop = await TransferableAirDropper.new(
@@ -161,6 +162,7 @@ contract("TransferableAirDropper", ([owner, buyer, buyer2, buyer3]) => {
         })
       );
     });
+
     it("stops airdrop when uneven token amount was given", async () => {
       const tokenTmp = await ZTX.new();
       const airdropTmp = await TransferableAirDropper.new(
@@ -194,6 +196,90 @@ contract("TransferableAirDropper", ([owner, buyer, buyer2, buyer3]) => {
     });
   });
 
+  describe("#triggerAirDrops", () => {
+    beforeEach(async () => {
+      token = await ZTX.new();
+      airdrop = await TransferableAirDropper.new(
+        capOnAirdropReceivers,
+        tokenAmountPerAirDrop,
+        token.address
+      );
+
+      await token.mint(airdrop.address, airdropShare);
+      await token.unpause();
+    });
+
+    it("sends tokens to recipients", async () => {
+      const buyers = [buyer, buyer2, buyer3];
+      await airdrop.triggerAirDrops(buyers, {
+        from: owner
+      });
+      let buyerBalance;
+      for (index = 0; index < buyers.length; ++index) {
+        buyerBalance = await token.balanceOf(buyers[index]);
+        buyerBalance.should.be.bignumber.equal(tokenAmountPerAirDrop);
+      }
+    });
+
+    it("should NOT work with recipient that already received airdrop", async () => {
+      await airdrop.triggerAirDrop(buyer2, {
+        from: owner
+      });
+      const buyers = [buyer, buyer2, buyer3];
+      await assertRevert(
+        airdrop.triggerAirDrops(buyers, {
+          from: owner
+        })
+      );
+    });
+
+    it("should NOT work with same recipient twice in recipients list", async () => {
+      const buyers = [buyer, buyer2, buyer3, buyer];
+      await assertRevert(
+        airdrop.triggerAirDrops(buyers, {
+          from: owner
+        })
+      );
+    });
+
+    it("must be called only by owner", async () => {
+      const buyers = [buyer, buyer2, buyer3];
+      await assertRevert(
+        airdrop.triggerAirDrops(buyers, {
+          from: buyer
+        })
+      );
+    });
+
+    it("cant airdrop when limit is reached", async () => {
+      const buyers = [buyer, buyer2, buyer3];
+
+      const tokenTmp = await ZTX.new();
+      const airdropTmp = await TransferableAirDropper.new(
+        2,
+        tokenAmountPerAirDrop,
+        tokenTmp.address
+      );
+      await tokenTmp.mint(airdropTmp.address, tokenAmountPerAirDrop.mul(2));
+      await tokenTmp.unpause();
+
+      await assertRevert(
+        airdropTmp.triggerAirDrops(buyers, {
+          from: owner
+        })
+      );
+      const buyers2 = [buyer, buyer2];
+      await airdropTmp.triggerAirDrops(buyers2, {
+        from: owner
+      });
+      await assertRevert(
+        airdropTmp.triggerAirDrop(buyer3, {
+          from: owner
+        })
+      );
+    });
+  });
+
   describe("#emergencyDrainAirdrop", () => {
     beforeEach(async () => {
       token = await ZTX.new();
@@ -206,6 +292,7 @@ contract("TransferableAirDropper", ([owner, buyer, buyer2, buyer3]) => {
       await token.mint(airdrop.address, airdropShare);
       await token.unpause();
     });
+
     it("must be called only by owner", async () => {
       try {
         await airdrop.emergencyDrainAirdrop(10e18, {
@@ -264,6 +351,7 @@ contract("TransferableAirDropper", ([owner, buyer, buyer2, buyer3]) => {
       await token.mint(airdrop.address, tokenAmountPerAirDrop.mul(3));
       await token.unpause();
     });
+
     it("must be called only by owner", async () => {
       await airdrop.triggerAirDrop(buyer, {
         from: owner
