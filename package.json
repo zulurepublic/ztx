@@ -1,7 +1,7 @@
 {
-    "name": "zulu-smart-contracts",
+    "name": "ztx",
     "version": "1.0.0",
-    "description": "Zulu Republic Smart Contracts and its tests",
+    "description": "Zulu Republic ZTX Token And Airdrop Smart Contracts",
     "main": "truffle-config.js",
     "directories": {
         "test": "test"
