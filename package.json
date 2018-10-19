@@ -1,5 +1,5 @@
 {
-    "name": "ztx",
+    "name": "ztx-token",
     "version": "1.0.0",
     "description": "Zulu Republic ZTX Token And Airdrop Smart Contracts",
     "main": "truffle-config.js",
